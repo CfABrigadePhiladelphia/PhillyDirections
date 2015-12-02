@@ -17,4 +17,5 @@ What else might be useful for this application?
 * Ability to save directions
 * Ability to save landmarks
 * Ability to view more information about a landmark
+* Ability for user to submit a landmark
 
