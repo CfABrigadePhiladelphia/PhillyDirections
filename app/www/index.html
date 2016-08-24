@@ -52,9 +52,11 @@
           <h2>{{ul.selected.name}}</h2>
           <p>{{ul.selected.content}}</p>
 
-          <md-button class="share" md-no-ink ng-click="ul.makeContact(ul.selected)" aria-label="Share with {{ ul.selected.name }}">
-            <md-icon md-svg-icon="share"></md-icon>
+          <md-button class="share" md-no-ink ng-click="ul.takePic($event)" aria-label="Share with {{ ul.selected.name }}">
+            <md-icon md-svg-icon="camera"></md-icon>
+            <input type="file" id="take-picture" accept="image/*" style="display:none">
           </md-button>
+          
         </md-content>
 
     </div>
@@ -63,6 +65,7 @@
     <script src="./bower_components/angular-animate/angular-animate.js"></script>
     <script src="./bower_components/angular-aria/angular-aria.js"></script>
     <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 
     <script src="./src/users/Users.js"></script>
     <script src="./src/users/UserController.js"></script>
@@ -78,10 +81,8 @@
                       .defaultIconSet("./assets/svg/avatars.svg", 128)
                       .icon("menu"       , "./assets/svg/menu.svg"        , 24)
                       .icon("share"      , "./assets/svg/share.svg"       , 24)
-                      .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
-                      .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
-                      .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
-                      .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+                      .icon("camera"     , "./assets/svg/camera.svg"      , 512)
+                      .icon("landscape"   , "./assets/svg/landscape-picture.svg"    , 512);
 
                       $mdThemingProvider.theme('default')
                           .primaryPalette('orange')
@@ -90,6 +91,7 @@
               });
 
     </script>
+
 
   </body>
 </html>

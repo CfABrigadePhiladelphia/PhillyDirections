@@ -14,14 +14,23 @@
    * @param avatarsService
    * @constructor
    */
+
+
   function UserController( userService, $mdSidenav, $mdBottomSheet, $timeout, $log ) {
     var self = this;
+    var config = {
+      apiKey: "AIzaSyDrn6FZv475qfEtRnMgpOPBmhErAqcsebQ",
+      authDomain: "phillydirections.firebaseapp.com",
+      databaseURL: "https://phillydirections.firebaseio.com",
+      storageBucket: "phillydirections.appspot.com",
+    };
+    firebase.initializeApp(config);
 
     self.selected     = null;
     self.users        = [ ];
     self.selectUser   = selectUser;
     self.toggleList   = toggleUsersList;
-    self.makeContact  = makeContact;
+    self.takePic  = takePic;
 
     // Load all registered users
 
@@ -36,6 +45,24 @@
     // Internal methods
     // *********************************
 
+    angular.element(document).ready(function(){
+      self.takePicture = document.querySelector("#take-picture");
+      self.takePicture.onchange = function (event) {
+          // Get a reference to the taken picture or chosen file
+          var files = event.target.files,
+              file;
+          if (files && files.length > 0) {
+              file = files[0];
+
+              var storageRef = firebase.storage().ref().child(file.name);
+              storageRef.put(file).then(function(snapshot) {
+                console.log(snapshot);
+              });
+            }
+        //var uploadTask = storageRef.child('images/' + file.name).put(file);
+          
+      };
+    })
     /**
      * Hide or Show the 'left' sideNav area
      */
@@ -54,36 +81,15 @@
     /**
      * Show the Contact view in the bottom sheet
      */
-    function makeContact(selectedUser) {
+    function takePic(ev) {
+      console.log(ev);
+      angular.element(ev.target).parent().children()[1].click();
 
-        $mdBottomSheet.show({
-          controllerAs  : "vm",
-          templateUrl   : './src/users/view/contactSheet.html',
-          controller    : [ '$mdBottomSheet', ContactSheetController],
-          parent        : angular.element(document.getElementById('content'))
-        }).then(function(clickedItem) {
-          $log.debug( clickedItem.name + ' clicked!');
-        });
 
-        /**
-         * User ContactSheet controller
-         */
-        function ContactSheetController( $mdBottomSheet ) {
-          this.user = selectedUser;
-          this.items = [
-            { name: 'Phone'       , icon: 'phone'       , icon_url: 'assets/svg/phone.svg'},
-            { name: 'Twitter'     , icon: 'twitter'     , icon_url: 'assets/svg/twitter.svg'},
-            { name: 'Google+'     , icon: 'google_plus' , icon_url: 'assets/svg/google_plus.svg'},
-            { name: 'Hangout'     , icon: 'hangouts'    , icon_url: 'assets/svg/hangouts.svg'}
-          ];
-          this.contactUser = function(action) {
-            // The actually contact process has not been implemented...
-            // so just hide the bottomSheet
-
-            $mdBottomSheet.hide(action);
-          };
-        }
     }
+
+
+
 
   }
 
