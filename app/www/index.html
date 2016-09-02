@@ -25,6 +25,9 @@
 
   <body ng-app="starterApp" layout="column" ng-controller="UserController as ul" ng-cloak>
 
+
+
+
     <md-toolbar layout="row">
     <div class="md-toolbar-tools">
       <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
@@ -56,6 +59,9 @@
             <md-icon md-svg-icon="camera"></md-icon>
             <input type="file" id="take-picture" accept="image/*" style="display:none">
           </md-button>
+
+
+
           
         </md-content>
 
@@ -69,7 +75,10 @@
 
     <script src="./src/users/Users.js"></script>
     <script src="./src/users/UserController.js"></script>
+    <script src="./src/users/view/LoginController.js"></script>
     <script src="./src/users/UserService.js"></script>
+    <script src="./src/users/view/Services.js"></script>
+    <script src="./src/users/view/LoginService.js"></script>
 
     <script type="text/javascript">
 

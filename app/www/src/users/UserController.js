@@ -7,6 +7,7 @@
           UserController
        ]);
 
+
   /**
    * Main Controller for the Angular Material Starter App
    * @param $scope
@@ -87,8 +88,6 @@
 
 
     }
-
-
 
 
   }
