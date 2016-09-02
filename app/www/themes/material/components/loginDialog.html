@@ -4,6 +4,9 @@
     <div class="md-toolbar-tools">
       <h2 class="md-flex">{{title}}</h2>
       <span flex></span>
+      <md-button aria-label="Close dialog" class="md-icon-button" ng-click="closeDialog($mdOpenMenu, $event)">
+        <md-icon md-font-icon="icon-close" ng-style="{'font-size': '20px', height: '20px','color':'#ffffff'}"></md-icon>
+      </md-button>
       <md-progress-circular ng-hide="{{test}}" class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </div>
   </md-toolbar>
