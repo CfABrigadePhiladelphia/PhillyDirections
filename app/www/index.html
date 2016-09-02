@@ -1,106 +1,120 @@
 <!DOCTYPE html>
-<html lang="en" >
-  <head>
-    <title>PhillyDirections</title>
+<html>
+    <head>
+        <!-- start: Meta. Tagz -->
+        
+        <title>App</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" > 
+        <!-- Enable all requests, inline styles, and eval() -->
+        <!-- Allows XHRs only over HTTPS on the same domain. -->
+<meta http-equiv="Content-Security-Policy" content="default-src *;img-src * 'self' data:; style-src * 'unsafe-inline'; media-src *;script-src 'self' https://cdn.firebase.com https://*.firebaseio.com https://*.firebaseio.co https://*.firebaseapp.com https://*.gstatic.com http://*.google.com https://*.google.com https://*.googleapis.com https://*.emelle.me http://*.emelle.me 'unsafe-eval'; object-src 'self' 'unsafe-eval'">
+        
+        <link href="./themes/material/css/icomoon.css" rel="stylesheet">
+        <link href="./bower_components/angular-material/angular-material.min.css" rel="stylesheet" type="text/css"/>
+        <link href="./themes/material/css/app.css" rel="stylesheet">
+        <!-- style sheet -->
+        <!-- module -->
+        
+    </head>
+    <body ng-app="materialApp">
+      
+    <div ng-controller="DashCtrl as ul" layout="column" ng-cloak style="height:100%">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+      
 
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
-    <link rel="stylesheet" href="./bower_components/angular-material/angular-material.css"/>
-    <link rel="stylesheet" href="assets/app.css"/>
+      <md-toolbar layout="row" layout-align="start center" class="main-toolbar">
+          <md-button class="md-icon-button" ng-click="ul.toggleList()" aria-label="Search">
+            <md-icon md-font-icon="icon-menu" alt="edit" ng-style="{'font-size':'24px', 'color':'#ffffff'}"></md-icon>
+          </md-button>
+          <span flex-xs="10"></span>
+          <md-toolbar-title style="text-align:center">
+            <span ng-class="$root.subTitleClass" ng-bind-html="$root.subTitle"></span>
+          </md-toolbar-title>
+          <span flex></span>
 
-    <style type="text/css">
-        /**
-         * Hide when Angular is not yet loaded and initialized
-         */
-        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-          display: none !important;
-        }
-    </style>
+          <md-button class="share" md-no-ink ng-click="ul.takePic($event)" aria-label="Share with {{ ul.selected.name }}">
+    <md-icon md-svg-icon="camera"></md-icon>
+    <input type="file" id="take-picture" accept="image/*" style="display:none">
+  </md-button>
 
-  </head>
-
-  <body ng-app="starterApp" layout="column" ng-controller="UserController as ul" ng-cloak>
-
-
-
-
-    <md-toolbar layout="row">
-    <div class="md-toolbar-tools">
-      <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
-        <md-icon md-svg-icon="menu" ></md-icon>
+          <md-menu>
+      <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="ul.openMenu($mdOpenMenu, $event)">
+        <md-icon md-menu-origin md-font-icon="icon-more-vert" ng-style="{'font-size': '24px', height: '40px','color':'#ffffff'}"></md-icon>
       </md-button>
-      <h1 style="color:#ffffff">PhillyDirections</h1>
-    </div>
+      <md-menu-content width="4">
+        
+        
+        
+        <md-menu-item>
+          <md-button>
+            <md-icon md-font-icon="icon-settings"></md-icon>
+            Settings
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button ng-click="ul.fireInOut()">
+            <md-icon md-svg-icon="social:notifications-{{ul.notificationsEnabled ? 'off' : 'on'}}"></md-icon>
+            {{$root.fireUser ? 'Sign Out' : 'Sign In' }}
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
     </md-toolbar>
+    <md-progress-linear md-mode="indeterminate" ng-show="$root.searching"></md-progress-linear>
 
-    <div flex layout="row">
-
-        <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" class="md-whiteframe-z2" >
+    <section flex layout="row">
+    <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" class="md-whiteframe-z2" >
           <md-list>
-            <md-list-item ng-repeat="it in ul.users">
-                <md-button ng-click="ul.selectUser(it)" ng-class="{'selected' : it === ul.selected }">
+            <md-list-item ng-repeat="it in ul.leftMenu">
+                <md-button ng-click="ul.selectItem(it)" ng-class="{'selected' : it === ul.selected }">
                   <md-icon md-svg-icon="{{it.avatar}}" class="avatar"></md-icon>
                   {{it.name}}
                 </md-button>
             </md-list-item>
           </md-list>
-        </md-sidenav>
-
-        <md-content flex id="content">
-          <md-icon md-svg-icon="{{ul.selected.avatar}}" class="avatar"></md-icon>
-          <h2>{{ul.selected.name}}</h2>
-          <p>{{ul.selected.content}}</p>
-
-          <md-button class="share" md-no-ink ng-click="ul.takePic($event)" aria-label="Share with {{ ul.selected.name }}">
-            <md-icon md-svg-icon="camera"></md-icon>
-            <input type="file" id="take-picture" accept="image/*" style="display:none">
-          </md-button>
-
-
-
-          
-        </md-content>
-
-    </div>
-
-    <script src="./bower_components/angular/angular.js"></script>
-    <script src="./bower_components/angular-animate/angular-animate.js"></script>
-    <script src="./bower_components/angular-aria/angular-aria.js"></script>
-    <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
-
-    <script src="./src/users/Users.js"></script>
-    <script src="./src/users/UserController.js"></script>
-    <script src="./src/users/view/LoginController.js"></script>
-    <script src="./src/users/UserService.js"></script>
-    <script src="./src/users/view/Services.js"></script>
-    <script src="./src/users/view/LoginService.js"></script>
-
-    <script type="text/javascript">
-
-          angular
-              .module('starterApp', ['ngMaterial', 'users'])
-              .config(function($mdThemingProvider, $mdIconProvider){
-
-                  $mdIconProvider
-                      .defaultIconSet("./assets/svg/avatars.svg", 128)
-                      .icon("menu"       , "./assets/svg/menu.svg"        , 24)
-                      .icon("share"      , "./assets/svg/share.svg"       , 24)
-                      .icon("camera"     , "./assets/svg/camera.svg"      , 512)
-                      .icon("landscape"   , "./assets/svg/landscape-picture.svg"    , 512);
-
-                      $mdThemingProvider.theme('default')
-                          .primaryPalette('orange')
-                          .accentPalette('red');
-
-              });
-
-    </script>
-
-
+        </md-sidenav>        
+    <div ui-view ng-cloak layout-align="start start" style=""></div>
+  </section>
+  </div>
+<!-- <footer id="footer"  style="border-top: 1px solid #7A385F;" layout="row">
+    <div layout-padding>
+    <img height="50" ng-show="{{(event.main_image ===undefined)}}" ng-src="./themes/material/img/jumpIn-small.png"></div>
+    <span flex></span>
+      <div layout="column" layout-fill layout-align="end center">
+      <p>
+        <a href="/#/terms">
+          Terms and Conditions
+        </a>
+      </p>
+      <p>
+        <a href="/#/privacy">
+          Privacy Policy
+        </a>
+      </p>
+      </div>
+    </footer> -->
+<!--    <script type="text/javascript" src="cordova.js"></script> -->
+    <script type="text/javascript" src="./bower_components/angular/angular.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+    <script src="./bower_components/angular-route/angular-route.js"></script>
+    <script src="./bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="./bower_components/angularfire/dist/angularfire.js"></script>
+    <script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script>
+    
+    <script type="text/javascript" src="./bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="./bower_components/angularfire/dist/angularfire.js"></script>
+    <script src="./bower_components/ngCordova/dist/ng-cordova.js"></script>
+    <script type="text/javascript" src="./bower_components/moment/moment.js"></script>
+    
+        <script type="text/javascript" src="./bower_components/angular-animate/angular-animate.min.js"></script>
+        <script type="text/javascript" src="./bower_components/angular-aria/angular-aria.min.js"></script>
+        <script type="text/javascript" src="./bower_components/angular-material/angular-material.min.js"></script>
+        <script src="./themes/material/js/app.module.js"></script>
+        <script src="./themes/material/js/app.storage.js"></script>
+        <script src="./themes/material/js/main.js"></script>
+        <script src="./themes/material/js/views/home.js"></script>
+        
   </body>
 </html>

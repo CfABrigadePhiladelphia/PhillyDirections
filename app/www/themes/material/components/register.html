@@ -1,0 +1,35 @@
+<md-dialog aria-label="List dialog">
+<form>
+<md-toolbar class="md-primary md-hue-1">
+    <div class="md-toolbar-tools">
+      <h2 class="md-flex">Register</h2>
+      <span flex></span>
+      <md-button aria-label="Close dialog" class="md-icon-button" ng-click="ul.openMenu($mdOpenMenu, $event)">
+        <md-iconmd-font-icon="icon-close" ng-style="{'font-size': '20px', height: '20px','color':'#ffffff'}"></md-icon>
+      </md-button>
+      <md-progress-circular ng-hide="{{test}}" class="md-accent" md-mode="indeterminate"></md-progress-circular>
+    </div>
+  </md-toolbar>
+<md-dialog-content layout="column" layout-padding layout="center center">
+
+        <md-input-container flex md-no-float class="md-block">
+          <input type="text" ng-model="firstName" placeholder="Name">
+        </md-input-container>
+        <md-input-container flex md-no-float>
+          <label>Email</label>
+          <input type="email" ng-model="email">
+        </md-input-container>
+      <md-input-container flex md-no-float>
+        <label>Password</label>
+        <input type="password" ng-model="password">
+      </md-input-container>
+    
+      
+  </md-dialog-content>
+<md-dialog-actions layout="row">
+      <md-button class="md-raised" ng-click="login(event)">Login</md-button>
+      <span flex></span>
+      <md-button class="md-raised" ng-click="register(event)">Sign Up</md-button>
+    </md-dialog-actions>
+</form>
+</md-dialog>

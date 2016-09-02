@@ -1,0 +1,32 @@
+div.radioSearch {
+  margin-bottom: 20px; }
+
+ .radioSearch .md-checked {
+  background-color: #ECFAFB;
+  border-radius: 2px; }
+
+  .radioSearch .row {
+  border-bottom: 1px dashed #ddd; }
+
+  .radioSearch div.row:last-child {
+   }
+
+   .prop-detail{
+   	font-size: 12px;
+   }
+
+   .property-images #horizontal-container {
+  height: 100px;
+  width: 100%; }
+.property-images .repeated-item {
+  border-right: 1px solid #ddd;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 84px;
+  padding-top: 5px;
+  text-align: center;
+  width: 120px; }
+.property-images md-content {
+  margin: 16px; }
+.property-images md-virtual-repeat-container {
+   }
