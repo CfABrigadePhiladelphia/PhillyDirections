@@ -227,8 +227,13 @@ var ang = angular
           if (files && files.length > 0) {
               file = files[0];
 
+
               var storageRef = firebase.storage().ref().child(file.name);
-              storageRef.put(file).then(function(snapshot) {
+var metadata = {
+  name: file.name
+};
+
+              storageRef.put(file,metadata).then(function(snapshot) {
                 console.log(snapshot);
               });
             }
