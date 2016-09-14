@@ -64,6 +64,34 @@
     </md-toolbar>
     <md-progress-linear md-mode="indeterminate" ng-show="$root.searching"></md-progress-linear>
 
+
+
+    <md-content class="md-padding" layout-xs="column" layout="row">
+   <div flex-xs flex-gt-xs="50" layout="column">
+      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Most Recent Picture</span>
+            <span class="md-subhead"></span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media">
+              <canvas id="image1" class="md-card-image" alt="Washed Out">
+              </canvas>
+            </div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button>Action 1</md-button>
+          <md-button class="md-icon-button"><md-icon md-font-icon="icon-rotate-right" ng-style="{'font-size':'24px','height':'24px'}"></md-icon></md-button>
+        </md-card-actions>
+      </md-card>
+     
+
+    </div>
+  </md-content>
+
+
     <section flex layout="row">
     <md-sidenav  ng-click="ul.toggleList()" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="left" class="md-whiteframe-z2" >
           <md-list>
@@ -77,7 +105,13 @@
         </md-sidenav>        
     <div ui-view ng-cloak layout-align="start start" style=""></div>
   </section>
+
+
   </div>
+
+
+
+
 <!-- <footer id="footer"  style="border-top: 1px solid #7A385F;" layout="row">
     <div layout-padding>
     <img height="50" ng-show="{{(event.main_image ===undefined)}}" ng-src="./themes/material/img/jumpIn-small.png"></div>

@@ -219,28 +219,40 @@ var ang = angular
   };
 
   angular.element(document).ready(function(){
-      self.takePicture = document.querySelector("#take-picture");
-      self.takePicture.onchange = function (event) {
-          // Get a reference to the taken picture or chosen file
-          var files = event.target.files,
-              file;
-          if (files && files.length > 0) {
-              file = files[0];
+    $rootScope.canvas = document.getElementById('image1');
+    self.takePicture = document.querySelector("#take-picture");
+    self.takePicture.onchange = function (event) {
+      // Get a reference to the taken picture or chosen file
+      var files = event.target.files,
+      file;
+      if (files && files.length > 0) {
+        file = files[0];
+        var reader = new FileReader();
+        reader.onload = function(e){
+          $rootScope.context = $rootScope.canvas.getContext('2d');
+          $rootScope.imageObj = new Image();
+          $rootScope.imageObj.onload = function() {
+            $rootScope.context.drawImage($rootScope.imageObj,0,0,$rootScope.imageObj.width,$rootScope.imageObj.height, 0,0,150,150);
+          }
+          $rootScope.imageObj.src = reader.result;
+        };
 
+        reader.readAsDataURL(file);
 
-              var storageRef = firebase.storage().ref().child(file.name);
-var metadata = {
-  name: file.name
-};
+        //Upload to Google
+              var postData = file.name;
 
-              storageRef.put(file,metadata).then(function(snapshot) {
-                console.log(snapshot);
-              });
-            }
-        //var uploadTask = storageRef.child('images/' + file.name).put(file);
-          
-      };
-    })
+              var newPostKey = firebase.database().ref().child('Kelsey').push().key;
+
+              var updates = {};
+              updates['/Kelsey/' + newPostKey] = postData;
+
+              var storageRef = firebase.storage().ref().child(newPostKey);
+              storageRef.put(file);
+    };
+  };
+});
+
     /**
      * Hide or Show the 'left' sideNav area
      */

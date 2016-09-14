@@ -55,13 +55,20 @@
           if (files && files.length > 0) {
               file = files[0];
 
-              var storageRef = firebase.storage().ref().child(file.name);
+              var postData = file.name
+
+              var newPostKey = firebase.database().ref().child(user).push().key;
+
+              var updates = {};
+              updates['/' + user + '/' + newPostKey] = postData;
+
+              var storageRef = firebase.storage().ref().child(newPostKey);
               storageRef.put(file).then(function(snapshot) {
                 console.log(snapshot);
               });
             }
         //var uploadTask = storageRef.child('images/' + file.name).put(file);
-          
+
       };
     })
     /**
