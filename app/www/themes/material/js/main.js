@@ -86,6 +86,8 @@ var ang = angular
 
 .controller('DashCtrl', function($rootScope,$state,$scope,$mdSidenav,$mdBottomSheet,$mdDialog,$mdToast,$http,$filter,$mdMedia,$timeout,$firebaseArray) {
 //document.addEventListener("deviceready", function () {
+
+
   var self = this;
   self.isLoading=true;
   var config = {
@@ -95,6 +97,11 @@ var ang = angular
       storageBucket: "phillydirections.appspot.com",
     };
     firebase.initializeApp(config);
+
+  $rootScope.pictures = $firebaseArray(firebase.database().ref().child('Kelsey'));
+  $rootScope.pictures.$loaded(function(){
+    console.log($rootScope.pictures);
+  })
 
   self.selected     = null;
     var leftMenu = [
@@ -121,8 +128,20 @@ var ang = angular
     self.fireInOut = signInOut;
     self.signIn = signIn;
     self.registerUser = register;
+    self.rotate = rotate;
 
-    
+  function rotate(ev){
+      console.log(ev);
+        var canvas = ev.target.previousElementSibling
+        var r = 'rotate(90deg)';
+        canvas.style = {
+            '-moz-transform': r,
+            '-webkit-transform': r,
+            '-o-transform': r,
+            '-ms-transform': r
+        };
+    }
+
 
     function signInOut(){
       if($rootScope.fireUser !== undefined){
@@ -192,7 +211,13 @@ var ang = angular
       }
 
       scope.loginUser = function(e){
-          fbStorage.emailAuth(scope.email,scope.password);
+          firebase.auth().signInWithEmailAndPassword(scope.email, scope.password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+              });
+          $mdDialog.hide();
       }
 
       scope.register = function(e){
@@ -239,13 +264,26 @@ var ang = angular
 
         reader.readAsDataURL(file);
 
+        //Select directory based on user
+        console.log(firebase.auth().currentUser);
+        if(firebase.auth().currentUser!== undefined && firebase.auth().currentUser != null){
+          var curDir = firebase.auth().currentUser.uid;
+        }else{
+          var curDir = 'anonymous'
+        }
+
+
         //Upload to Google
+
+
               var postData = file.name;
 
-              var newPostKey = firebase.database().ref().child('Kelsey').push().key;
+              var newPostKey = firebase.database().ref().child(curDir).push().key;
 
               var updates = {};
-              updates['/Kelsey/' + newPostKey] = postData;
+              updates['/' + curDir + '/' + newPostKey] = postData;
+
+              firebase.database().ref().update(updates);
 
               var storageRef = firebase.storage().ref().child(newPostKey);
               storageRef.put(file);
@@ -253,12 +291,21 @@ var ang = angular
   };
 });
 
+ang.directive('rotate', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            
+        }
+    };
+});
+
     /**
      * Hide or Show the 'left' sideNav area
      */
     function toggleUsersList() {
       $mdSidenav('left').toggle();
-    }
+    };
 
     /**
      * Select the current avatars
@@ -266,7 +313,7 @@ var ang = angular
      */
     function selectItem ( id ) {
       self.selected = angular.isNumber(id) ? $scope.leftMenu[id] : id;
-    }
+    };
 
     /**
      * Show the Contact view in the bottom sheet
@@ -274,9 +321,10 @@ var ang = angular
     function takePic(ev) {
       console.log(ev);
       angular.element(ev.target).parent().children()[1].click();
+    };
 
 
-    }
+
 
     function RegisterDialogController(scope, $mdDialog,$firebaseAuth) {
       var auth = $firebaseAuth();
@@ -293,7 +341,15 @@ var ang = angular
       }
 
       scope.register = function(e){
-          fbStorage.register(scope.firstName,scope.email,scope.password);
+
+          firebase.auth().createUserWithEmailAndPassword(scope.email, scope.password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+          });
+          $mdDialog.hide();
+ 
       }
 
       $rootScope.$watch(function(scope) { return $rootScope.fireUser },

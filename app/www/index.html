@@ -64,26 +64,32 @@
     </md-toolbar>
     <md-progress-linear md-mode="indeterminate" ng-show="$root.searching"></md-progress-linear>
 
+    <div> 
+      <canvas id="image1" class="md-card-image" alt="Washed Out">
+      </canvas>
+      <md-icon md-font-icon="icon-rotate-right" ng-click="ul.rotate($event)" ng-style="{'height':'24px'}">
+      </md-icon>
+    </div>
+   
 
 
     <md-content class="md-padding" layout-xs="column" layout="row">
    <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+      <md-card ng-repeat="(key, value) in $rootScope.pictures" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">Most Recent Picture</span>
+            <span class="md-headline">{{key}}</span>
             <span class="md-subhead"></span>
           </md-card-title-text>
           <md-card-title-media>
             <div class="md-media-lg card-media">
-              <canvas id="image1" class="md-card-image" alt="Washed Out">
-              </canvas>
+              <img ng-src="value">
             </div>
           </md-card-title-media>
         </md-card-title>
         <md-card-actions layout="row" layout-align="end center">
-          <md-button>Action 1</md-button>
-          <md-button class="md-icon-button"><md-icon md-font-icon="icon-rotate-right" ng-style="{'font-size':'24px','height':'24px'}"></md-icon></md-button>
+          <!-- <md-button>Action 1</md-button> -->
+          
         </md-card-actions>
       </md-card>
      
