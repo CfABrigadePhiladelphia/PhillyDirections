@@ -132,14 +132,25 @@ var ang = angular
 
   function rotate(ev){
       console.log(ev);
-        var canvas = ev.target.previousElementSibling
-        var r = 'rotate(90deg)';
-        canvas.style = {
-            '-moz-transform': r,
-            '-webkit-transform': r,
-            '-o-transform': r,
-            '-ms-transform': r
-        };
+        var canvas = ev.target.previousElementSibling;
+        var ctx = canvas.getContext("2d");
+        ctx.save();
+        
+        // var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(canvas.width /2, canvas.height/2);
+        ctx.rotate(90 * Math.PI/180);
+        ctx.drawImage($rootScope.imageObj,0,0,$rootScope.imageObj.width,$rootScope.imageObj.height, 0,0,150,150);
+        ctx.restore();
+        // 
+
+        // var r = 'rotate(90deg)';
+        // canvas.style = {
+        //     '-moz-transform': r,
+        //     '-webkit-transform': r,
+        //     '-o-transform': r,
+        //     '-ms-transform': r
+        // };
     }
 
 
