@@ -98,9 +98,8 @@ var ang = angular
     };
     firebase.initializeApp(config);
 
-  $rootScope.pictures = $firebaseArray(firebase.database().ref().child('Kelsey'));
+  $rootScope.pictures = $firebaseArray(firebase.database().ref().child($rootScope.userId + '/photos/'));
   $rootScope.pictures.$loaded(function(){
-    console.log($rootScope.pictures);
   })
 
   self.selected     = null;
@@ -132,15 +131,19 @@ var ang = angular
 
   function rotate(ev){
       console.log(ev);
-        var canvas = ev.target.previousElementSibling
-        var r = 'rotate(90deg)';
-        canvas.style = {
-            '-moz-transform': r,
-            '-webkit-transform': r,
-            '-o-transform': r,
-            '-ms-transform': r
+        var canvas = document.getElementById("image1")
+        console.log(canvas);
+        var canvas = ev.target.previousElementSibling;
+        var ctx = canvas.getContext("2d");
+        ctx.save();
+         
+        // var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(canvas.width /2, canvas.height/2);
+        ctx.rotate(90 * Math.PI/180);
+        ctx.drawImage($rootScope.imageObj,0,0,$rootScope.imageObj.width,$rootScope.imageObj.height, 0,0,150,150);
+        ctx.restore();
         };
-    }
 
 
     function signInOut(){
@@ -177,6 +180,9 @@ var ang = angular
         }, function(wantsFullScreen) {
           $rootScope.customFullscreen = (wantsFullScreen === true);
         });
+
+        $rootScope.userId = firebase.auth().currentUser.uid;
+
       
     }
     function register(){
@@ -265,8 +271,7 @@ var ang = angular
         reader.readAsDataURL(file);
 
         //Select directory based on user
-        console.log(firebase.auth().currentUser);
-        if(firebase.auth().currentUser!== undefined && firebase.auth().currentUser != null){
+        if($rootScope.userId != null){
           var curDir = firebase.auth().currentUser.uid;
         }else{
           var curDir = 'anonymous'
@@ -278,10 +283,10 @@ var ang = angular
 
               var postData = file.name;
 
-              var newPostKey = firebase.database().ref().child(curDir).push().key;
+              var newPostKey = firebase.database().ref().child(curDir + '/photos/').push().key;
 
               var updates = {};
-              updates['/' + curDir + '/' + newPostKey] = postData;
+              updates['/' + curDir + '/photos/' + newPostKey] = postData;
 
               firebase.database().ref().update(updates);
 
@@ -289,15 +294,6 @@ var ang = angular
               storageRef.put(file);
     };
   };
-});
-
-ang.directive('rotate', function () {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-            
-        }
-    };
 });
 
     /**
