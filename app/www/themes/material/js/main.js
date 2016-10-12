@@ -144,12 +144,10 @@ var ang = angular
 
   function rotate(ev){
       console.log(ev);
-        var canvas = document.getElementById("image1")
-        console.log(canvas);
         var canvas = ev.target.previousElementSibling;
         var ctx = canvas.getContext("2d");
         ctx.save();
-         
+        
         // var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.translate(canvas.width /2, canvas.height/2);
