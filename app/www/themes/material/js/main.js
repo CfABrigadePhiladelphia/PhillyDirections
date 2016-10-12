@@ -21,6 +21,18 @@ var ang = angular
         $rootScope.initialLimit = 5;
       }
 
+//http://ngcordova.com/docs/plugins/geolocation/
+  var posOptions = {timeout: 10000, enableHighAccuracy: false};
+  $cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+      var lat  = position.coords.latitude
+      var long = position.coords.longitude
+    }, function(err) {
+      console.log('Location not found');
+    });
+
+
     });
   });
   ang.config(function($locationProvider,$mdThemingProvider, $mdIconProvider,$sceDelegateProvider,$httpProvider,$stateProvider,$urlRouterProvider){
@@ -128,6 +140,7 @@ var ang = angular
     self.signIn = signIn;
     self.registerUser = register;
     self.rotate = rotate;
+    self.getLocation = getLocation;
 
   function rotate(ev){
       console.log(ev);
@@ -144,7 +157,6 @@ var ang = angular
         ctx.drawImage($rootScope.imageObj,0,0,$rootScope.imageObj.width,$rootScope.imageObj.height, 0,0,150,150);
         ctx.restore();
         };
-
 
     function signInOut(){
       if($rootScope.fireUser !== undefined){
@@ -281,12 +293,16 @@ var ang = angular
         //Upload to Google
 
 
-              var postData = file.name;
+              var postData = {file.name,
+                              lat: lat,
+                              long: long
+                            };
 
               var newPostKey = firebase.database().ref().child(curDir + '/photos/').push().key;
 
               var updates = {};
-              updates['/' + curDir + '/photos/' + newPostKey] = postData;
+              updates['/' + curDir + '/photos/' + newPostKey] = postData
+
 
               firebase.database().ref().update(updates);
 
